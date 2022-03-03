@@ -31,6 +31,17 @@ const getBooks= async function (req, res) {
     res.send({data: books})
 }
 
+const putBooks = async function (req,res){
+    const update = await bookModel.updateMany({$or: [{"publisher":"621fda2adb665505d81515e2"},{"publisher":"62211917a8a96feabc48abb7"}]})
+    res.send(update)
+}
+
+const updatePriceByRatings = async function(req,res){
+    const updatePrice = await bookModel.updateMany({ratings:{$gt:3.5}},{price : 112})
+    res.send(updatePrice)
+}
+
 
 module.exports.createBook= createBook
 module.exports.getBooks= getBooks
+module.exports.putBooks = putBooks
