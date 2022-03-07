@@ -7,8 +7,17 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+const GlobalMW = function (req, res, next){
+    const Time=  new Date().toISOString().replace(/T/,' ').replace(/\..+/,'') 
+    const Request=  req.originalUrl
+    const IP= req.ip
+    console.log (Time, Request, IP)
+}
+app.use(GlobalMW)
 
-mongoose.connect("mongodb+srv://functionup-cohort:G0Loxqc9wFEGyEeJ@cluster0.rzotr.mongodb.net/Pritesh8769811-DB?retryWrites=true&w=majority", {
+
+
+mongoose.connect("mongodb+srv://ratneshnath:RATNESh99@cluster0.x9keh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", {
     useNewUrlParser: true
 })
 .then( () => console.log("MongoDb is connected"))
