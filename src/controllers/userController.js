@@ -1,14 +1,14 @@
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/userModel");
 
-const createUser = async function (abcd, xyz) {
+const registerUser = async function (req, res) {
   //You can name the req, res objects anything.
   //but the first parameter is always the request 
   //the second parameter is always the response
-  let data = abcd.body;
+  let data = req.body;
   let savedData = await userModel.create(data);
-  console.log(abcd.newAtribute);
-  xyz.send({ msg: savedData });
+  // console.log(abcd.newAtribute);
+  res.send({ msg: savedData });
 };
 
 const loginUser = async function (req, res) {
@@ -67,6 +67,16 @@ const getUserData = async function (req, res) {
 };
 
 const updateUser = async function (req, res) {
+  let token = req.headers["x-Auth-token"];
+  if (!token) token = req.headers["x-auth-token"];
+
+  if (!token) return res.send({ status: false, msg: "token must be required" });
+
+
+  let decodedToken = jwt.verify(token, "functionup-thorium");
+  if (!decodedToken)
+    return res.send({ status: false, msg: "token is invalid" });
+
 // Do the same steps here:
 // Check if the token is present
 // Check if the token present is a valid token
@@ -84,7 +94,39 @@ const updateUser = async function (req, res) {
   res.send({ status: updatedUser, data: updatedUser });
 };
 
-module.exports.createUser = createUser;
+
+const deleteUser = async function (req, res) {
+  let token = req.headers["x-Auth-token"];
+  if (!token) token = req.headers["x-auth-token"];
+
+  if (!token) return res.send({ status: false, msg: "token must be required" });
+
+
+  let decodedToken = jwt.verify(token, "functionup-thorium");
+  if (!decodedToken)
+    return res.send({ status: false, msg: "token is invalid" });
+
+
+  let userId = req.params.userId;
+  let userInfo = await userModel.findById(userId);
+  
+  if (!userInfo) {
+    return res.send("No such user exists");
+  }
+
+  let userData = req.body;
+  let deleteUser = await userModel.findOneAndDelete({ isDeleted: true }, userData);
+  res.send({ status: deleteUser, data: deleteUser });
+};
+
+
+
+
+
+
+
+module.exports.registerUser = registerUser;
+module.exports.loginUser = loginUser;
 module.exports.getUserData = getUserData;
 module.exports.updateUser = updateUser;
-module.exports.loginUser = loginUser;
+module.exports.deleteUser = deleteUser;
