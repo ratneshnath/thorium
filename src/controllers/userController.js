@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/userModel");
 
+
 const registerUser = async function (req, res) {
   //You can name the req, res objects anything.
   //but the first parameter is always the request 
@@ -89,8 +90,8 @@ const updateUser = async function (req, res) {
     return res.send("No such user exists");
   }
 
-  let userData = req.body;
-  let updatedUser = await userModel.findOneAndUpdate({ _id: userId }, userData);
+  let userData = req.body.mobile;
+  let updatedUser = await userModel.findOneAndUpdate({ _id: userId },{ $set:{mobile:userData}} ,{new: true});
   res.send({ status: updatedUser, data: updatedUser });
 };
 
@@ -107,15 +108,16 @@ const deleteUser = async function (req, res) {
     return res.send({ status: false, msg: "token is invalid" });
 
 
-  let userId = req.params.userId;
-  let userInfo = await userModel.findById(userId);
+  let abc = req.params.userId;
+  let userInfo = await userModel.findById(abc);
   
   if (!userInfo) {
     return res.send("No such user exists");
   }
 
-  let userData = req.body;
-  let deleteUser = await userModel.findOneAndDelete({ isDeleted: true }, userData);
+  //let userData = req.body;
+  let deleteUser = await userModel.findOneAndUpdate({_id:abc
+  },{ $set:{isDeleted: true }}, {new: true});
   res.send({ status: deleteUser, data: deleteUser });
 };
 
