@@ -3,13 +3,18 @@ const userModel = require("../models/userModel");
 
 
 const registerUser = async function (req, res) {
-  //You can name the req, res objects anything.
-  //but the first parameter is always the request 
-  //the second parameter is always the response
-  let data = req.body;
-  let savedData = await userModel.create(data);
-  // console.log(abcd.newAtribute);
-  res.send({ msg: savedData });
+  try{
+    let data = req.body
+    console.log(data)
+    if(data){
+    let savedData = await userModel.create(data)
+    res.status(201).send({msg: savedData})
+  }else res.status(400).send({msg: "bad request"})
+}
+  catch(err){
+    console.log("this is an error: ",err.message)
+    res.send({msg:"error here",error:err.message})
+  }
 };
 
 const loginUser = async function (req, res) {
@@ -46,7 +51,7 @@ const getUserData = async function (req, res) {
   if (!token) token = req.headers["x-auth-token"];
 
   //If no token is present in the request header return error
-  if (!token) return res.send({ status: false, msg: "token must be present" });
+  if (!token) return res.status(401).send({ status: false, msg: "token must be present" });
 
   console.log(token);
   
@@ -105,7 +110,7 @@ const deleteUser = async function (req, res) {
 
   let decodedToken = jwt.verify(token, "functionup-thorium");
   if (!decodedToken)
-    return res.send({ status: false, msg: "token is invalid" });
+    return res.status(400).send({ status: false, msg: "token is invalid" });
 
 
   let abc = req.params.userId;
