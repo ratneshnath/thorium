@@ -1,2 +1,1 @@
-
-Backend project Feb 2022 - May 2022
+I, as a backend developer, at Function Up, have worked upon multiple projects. Currently i am seeking a new opportunity in the field of data/business analysis. I have learnt SQL, Python, Excel both at intermediate and advanced level. I have also done some projects such as world population analysis, customer segmentation analysis and used car analysis from Car Dekho.
